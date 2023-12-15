@@ -2,6 +2,7 @@ pub mod template;
 
 use num::Num;
 use regex::Captures;
+use std::cmp::PartialOrd;
 use std::fmt::Debug;
 use std::fmt::Display;
 
@@ -122,4 +123,39 @@ pub fn range_split1<T: Num + Ord + Copy + Display>(x: &(T, T), y: &(T, T)) -> Ve
 #[inline]
 pub fn range_overlap1<T: Num + Ord + Copy + Display>(x: &(T, T), y: &(T, T)) -> bool {
     x.0 < y.1 && y.0 < x.1
+}
+
+#[allow(dead_code)]
+pub fn transpose<T: Copy>(data: &Vec<Vec<T>>) -> Vec<Vec<T>> {
+    let rows = data.len();
+    let cols = data[0].len();
+    (0..cols)
+        .map(|col| (0..rows).map(|row| data[row][col]).collect())
+        .collect()
+}
+
+#[allow(dead_code)]
+pub fn transpose_text(s: &str) -> String {
+    let lines: Vec<Vec<char>> = s.lines().map(|line| line.chars().collect()).collect();
+    let transposed = transpose(&lines);
+    transposed
+        .iter()
+        .map(|line| line.iter().collect::<String>())
+        .collect::<Vec<_>>()
+        .join("\n")
+}
+
+#[allow(dead_code)]
+pub fn manhattan_distance<T: Num + PartialOrd>(p1: (T, T), p2: (T, T)) -> T {
+    let d1 = if p1.0 > p2.0 {
+        p1.0 - p2.0
+    } else {
+        p2.0 - p1.0
+    };
+    let d2 = if p1.1 > p2.1 {
+        p1.1 - p2.1
+    } else {
+        p2.1 - p1.1
+    };
+    d1 + d2
 }
