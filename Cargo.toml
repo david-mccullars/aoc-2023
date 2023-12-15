@@ -26,6 +26,7 @@ array_tool = "1.0.3"
 chrono = { version = "0.4.31", optional = true }
 dhat = { version = "0.3.2", optional = true }
 lazy_static = "1.4.0"
+num = "0.4.1"
 pico-args = "0.5.0"
 regex = "1.10.2"
 tinyjson = "2.5.1"
