@@ -1,5 +1,7 @@
 pub mod template;
 
+use regex::Captures;
+
 #[macro_export]
 macro_rules! regex {
     ($name:ident, $e:expr) => {
@@ -12,6 +14,7 @@ macro_rules! regex {
     };
 }
 
+#[allow(dead_code)]
 pub fn name_to_digit(s: &str) -> Option<u32> {
     match s {
         "zero" => Some(0),
@@ -25,5 +28,29 @@ pub fn name_to_digit(s: &str) -> Option<u32> {
         "eight" => Some(8),
         "nine" => Some(9),
         _ => None,
+    }
+}
+
+#[allow(dead_code)]
+pub fn str_to_vec<T: std::str::FromStr + Clone>(s: &str) -> Vec<T> {
+    s.split_whitespace()
+        .map(|s| match s.parse() {
+            Ok(val) => val,
+            Err(_) => {
+                eprintln!("Failed to parse string: {}", s);
+                std::process::exit(1);
+            }
+        })
+        .collect()
+}
+
+#[allow(dead_code)]
+pub fn capture_to_vec<T: std::str::FromStr + Clone>(captures: &Captures, group: usize) -> Vec<T> {
+    match captures.get(group) {
+        Some(val) => str_to_vec(val.as_str()),
+        None => {
+            eprintln!("No such capture group: {:?}", captures);
+            std::process::exit(1);
+        }
     }
 }
