@@ -20,6 +20,7 @@ today = ["chrono"]
 test_lib = []
 
 [dependencies]
+array_tool = "1.0.3"
 
 # Template dependencies
 chrono = { version = "0.4.31", optional = true }
