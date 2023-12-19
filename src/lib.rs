@@ -18,6 +18,11 @@ macro_rules! regex {
     };
 }
 
+#[macro_use]
+mod parser;
+
+pub use parser::*;
+
 #[allow(dead_code)]
 pub fn name_to_digit(s: &str) -> Option<u32> {
     match s {
