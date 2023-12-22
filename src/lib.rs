@@ -1,5 +1,6 @@
 pub mod template;
 
+use nalgebra::DMatrix;
 use num::Num;
 use regex::Captures;
 use std::cmp::PartialOrd;
@@ -191,4 +192,29 @@ pub fn rotate_mut<T: Copy>(data: &mut Vec<Vec<T>>) {
             data[j][n - i - 1] = temp;
         }
     }
+}
+
+#[allow(dead_code)]
+pub fn polynomial_interpolate<F>(x: Vec<f64>, f: F) -> Box<dyn Fn(f64) -> f64>
+where
+    F: Fn(f64) -> f64,
+{
+    let n = x.len();
+
+    let y: Vec<f64> = x.iter().map(|x| f(*x)).collect();
+    let y = DMatrix::from_column_slice(n, 1, &y);
+
+    let vandermonde: Vec<f64> = x
+        .iter()
+        .flat_map(|x| (0..n).map(|i| x.powf(i as f64)).rev())
+        .collect();
+    let vandermonde = DMatrix::from_row_slice(n, n, &vandermonde);
+
+    let a = vandermonde.lu().solve(&y).unwrap();
+    let a = a.data.as_vec().clone();
+
+    Box::new(move |x: f64| {
+        let powers = std::iter::successors(Some(1.0), move |&x_i| Some(x_i * x));
+        a.iter().rev().zip(powers).map(|(a_i, x_i)| a_i * x_i).sum()
+    })
 }
