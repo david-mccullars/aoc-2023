@@ -7,6 +7,10 @@ use std::cmp::PartialOrd;
 use std::fmt::Debug;
 use std::fmt::Display;
 
+mod graph;
+
+pub use graph::*;
+
 #[macro_export]
 macro_rules! regex {
     ($name:ident, $e:expr) => {

@@ -46,6 +46,13 @@ macro_rules! parser {
 }
 
 #[macro_export]
+macro_rules! str_parser {
+    () => {
+        |g| g
+    };
+}
+
+#[macro_export]
 macro_rules! string_parser {
     () => {
         |g| g.to_string()
